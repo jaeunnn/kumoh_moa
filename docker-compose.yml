@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+    nginx:
+        image: nginx:alpine
+        container_name: crawling-nginx
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - frontend
+            - backend
+        restart: unless-stopped
+
+    db:
+        image: postgres:15
+        container_name: crawling-postgres
+        environment:
+            POSTGRES_DB: crawling_db
+            POSTGRES_USER: kit_20201079
+            POSTGRES_PASSWORD: password7540
+            POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init-data:/docker-entrypoint-initdb.d
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U kit_20201079 -d crawling_db"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    backend:
+        image: jaeunnn/moa-backend:latest
+        container_name: crawling-backend
+        environment:
+            DATABASE_URL: postgresql://kit_20201079:password7540@db:5432/crawling_db
+            TZ: Asia/Seoul
+        depends_on:
+            db:
+                condition: service_healthy
+        restart: unless-stopped
+
+    frontend:
+        image: jaeunnn/moa-frontend:latest
+        container_name: crawling-frontend
+        depends_on:
+            - backend
+        restart: unless-stopped
+
+volumes:
+    postgres_data:
