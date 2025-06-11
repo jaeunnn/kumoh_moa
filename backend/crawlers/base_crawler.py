@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 class BaseCrawler:
     def __init__(self):
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
         }
         self.session = requests.Session()
         self.session.headers.update(self.headers)
