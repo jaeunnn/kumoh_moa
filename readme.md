@@ -28,6 +28,6 @@
 -   docker-compose.yml 확인
 -   init-data 폴더 확인 (01-schema.sql, 02-data.sql 포함)
 -   nginx.conf 확인
--   docker-compose up -d
+-   docker compose up -d
 -   물론 clone말고 docker-compose.yml, nginx.conf, init-data 폴더만으로도 사용가능
 -   localhost:80으로 실행
